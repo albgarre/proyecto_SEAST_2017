@@ -1,0 +1,79 @@
+---
+title: "Tarea: Minado de Discursos desde la Web"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Objetivos
+
+La página [beersandpolitics](http://www.beersandpolitics.com/discursos/) contiene transcripciones de discursos de varias personas relevantes internacionalmente a lo largo del tiempo. En esta tarea implementaremos una función que nos permita descargar estas transcripciones y guardarlas como un archivo .json. Esto nos permitirá analizarlos en tareas posteriores.
+
+Esta tarea se divide en dos partes. En primer lugar se implementará la función para el minado. Por último se generarán algunos archivos para comprobar el funcionamiento de la función. Los resultados de esta práctica se usarán extensivamente en el resto, por lo que el formato de tanto el input de la función como el output generado estará muy restringido.
+
+## Paquetes recomendados
+
+Se recomienda para esta práctica utilizar los paquetes:
+
+* `rvest`
+* `dplyr`
+* `rjson`
+
+Además, se recomienda usar el addon *SelectorGadget* de Chrome.
+
+## Requerimientos de la función implementada
+
+### Requerimientos del input
+
+La función solamente tendrá un argumento:
+
+* `nmax` entero definiendo un número máximo de discursos a descargar. Por defecto, se descargarán todos los discursos de la web.
+
+### Requerimientos del output
+
+* La función generará un archivo tipo .json para cada discurso descargado.
+* El nombre del archivo será la *fecha descarga '_' speecher '_' fecha discurso* (con fechas en formato AAAA-MM-DD. Por ejemplo *2017-03-07_Donald Trump_2017-01-20*.
+* El archivo .json tendra los siguientes atributos:
+
+    - speecher: Quién da el discurso.
+    - date: Fecha del discurso.
+    - speech: Texto del discurso.
+
+En el repositorio de Github del proyecto se encuentran ejemplos de cómo debe de ser un correcto output.
+
+## Archivos de texto a generar
+
+Generar 5 archivos .json utilizando la función desarrollada y comprobar su funcionamiento.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
