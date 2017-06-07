@@ -1,5 +1,0 @@
-## Tarea de regresión 
-
-function() {
-  
-}
