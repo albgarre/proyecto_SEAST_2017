@@ -20,10 +20,7 @@ web_scrapping <- function(nmax){
   for(i in 1:nmax) {
     url <- paste(c("http://www.beersandpolitics.com",urls[i,]),collapse='')
     pagina <- html(url)
-    
-    list1 <- vector(mode="list", length=2)
-    list1[[1]] <- c("speecher", "date", "speech")
-    
+  
     texto <- pagina %>% 
       html_nodes("hr + p") %>%
       html_text()
@@ -35,9 +32,9 @@ web_scrapping <- function(nmax){
     
     fecha <- autoryfecha[[1]][1]
     autor <- autoryfecha[[1]][2]
-    
-    list1[[2]] <- c(autor, fecha, texto)
-    exportJson <- toJSON(list1)
+
+    list <- list('speecher' = autor, 'date' = fecha, 'speech' = texto)
+    exportJson <- toJSON(list)
     
     today <- Sys.Date()
     title <- paste(today,autor,fecha,sep = "_")
