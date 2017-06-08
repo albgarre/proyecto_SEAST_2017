@@ -1,0 +1,12 @@
+---
+title: "prueba"
+author: "Sergio Lopez Milan"
+date: "7/6/2017"
+output: html_document
+---
+
+```{r}
+source("web_scrapping.R")
+web_scrapping(5)
+```
+
