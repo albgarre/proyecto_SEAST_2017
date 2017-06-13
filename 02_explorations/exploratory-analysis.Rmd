@@ -1,0 +1,92 @@
+---
+title: "exploratory-analysis"
+author: "Marcos Andreo"
+date: "14 de junio de 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(rjson)
+library(ggplot2)
+```
+
+## Adaptación de los datos
+
+Importamos desde archivo en formato JSON 
+```{r}
+jsonfile <- fromJSON(file = "../01_web-scrapping/resultS/2017-06-07_Pedro Sánchez_2017-05-21.json")
+```
+
+
+Preparamos un dataframe de nombre frases.discurso donde en cada fila se encontrará una frase
+```{r}
+jsonfile_df <- as.data.frame(jsonfile)
+frases <- strsplit(toString(jsonfile_df$texto), ".", fixed = TRUE)
+frases.discurso <- data.frame(contenido <- frases)
+colnames(frases.discurso) <- c("frase")
+```
+
+Número de frases
+```{r}
+n_frases <- nrow(frases.discurso)
+```
+
+
+Uso de un dataframe auxiliar para obtener el numero de palabras en una frase y el numero de palabras diferentes. A su vez se obtiene la diferencia de estos dos valores para ver el número de palabras repetidas. 
+```{r}
+aux.df <- data.frame( n_words = numeric(n_frases), n_words_dif = numeric(n_frases))
+
+for( i in 1:nrow(frases.discurso))
+{
+  frase.aux <- data.frame(strsplit(toString(frases.discurso$frase[i]), ' '))
+  colnames(frase.aux) <- c("word")
+  aux.df$n_words[i] <- nrow(frase.aux)
+  aux.df$n_words_dif[i] <- length((levels(frase.aux$word)))
+  
+  frase.aux <- NULL
+  
+}  
+
+frases.discurso <- cbind(frases.discurso, aux.df)
+
+frases.discurso <- frases.discurso %>%
+  mutate(repeticiones = n_words - n_words_dif)
+```
+
+El dataframe final tiene la siguiente estructura
+```{r}
+head(frases.discurso)
+```
+
+
+## Análisis de datos
+
+Evolución temporal en la duración de los discursos. Mediante este gráfico podemos observar si con el paso del tiempo, el numero de palabras por frase tiende a incrementar o decrementar.
+```{r}
+frases.discurso %>%
+  ggplot(aes(x = 1:40, y= n_words)) +
+  geom_line()
+```
+
+Evolución temporal de las repeticiones
+¿Conforme pasa el tiempo se tiende a repetir más palabras?
+```{r}
+frases.discurso %>%
+  ggplot(aes(x = 1:40, y= repeticiones)) +
+  geom_line()
+```
+
+Relación entre el numero de palabras total y el numero de palabras diferentes. El objetivo es ver si cuando el tamaño de una frase aumenta se debe a que se han repetido muchas palabras o no.
+```{r}
+ 
+ggplot() + 
+  geom_line(data = frases.discurso, aes(x = 1:40, y= n_words, color='Palabras por frase')) +
+  geom_line(data = frases.discurso, aes(x = 1:40, y= n_words_dif, color='Palabras diferentes por frase')) +
+  labs(x = 'número de frase', y = 'número de palabras', title = 'Comparación palabras totales - palabras repetidas', color='Leyenda')
+
+```
