@@ -1,0 +1,32 @@
+---
+title: "Word Cloud"
+author: "Sergio Lopez Milan"
+date: "7/6/2017"
+output: html_document
+---
+
+###Importar librerias necesarias
+```{r}
+library(tm)
+library(rjson)
+library(wordcloud)
+```
+
+###Importar un archivo descargado como json
+```{r}
+json_data <- fromJSON(file="../01_web-scrapping/results/ 2017-06-07_Pedro Sánchez_2017-05-21 .json")
+```
+
+### Minado del texto
+```{r}
+contenido <- Corpus(VectorSource(json_data$speech))
+contenido <- tm_map(contenido, PlainTextDocument)
+contenido <- tm_map(contenido, removePunctuation)
+contenido <- tm_map(contenido, removeWords, stopwords("spanish"))
+contenido  <- tm_map(contenido, content_transformer(tolower))
+
+wordcloud(contenido, max.words=100, scale=c(4,0.2), random.order=FALSE, colors=brewer.pal(8, "Dark2"))
+
+```
+
+
